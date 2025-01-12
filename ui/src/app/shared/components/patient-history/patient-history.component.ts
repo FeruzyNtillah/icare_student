@@ -142,11 +142,12 @@ export class PatientHistoryComponent implements OnInit {
           }
         })
       );
-    this.visits$ = this.visitsService
+      this.visits$ = this.visitsService
       .getAllPatientVisits(this.patient?.uuid, true)
       .pipe(
         map((response) => {
           this.loadingData = false;
+          console.log('Fetched visits:', response); // Debugging
           if (!response?.error) {
             return response?.map((visit) => {
               let obs = [];
@@ -186,6 +187,7 @@ export class PatientHistoryComponent implements OnInit {
           }
         })
       );
+    
 
     // this.getIPDRoundDoctorsForm();
   }
