@@ -171,6 +171,7 @@ export class PatientHistoryComponent implements OnInit {
           const serviceRecords = visit?.visit?.services || []; // Example service records
               return {
                 visit: visit?.visit,
+                notes: visit?.visit?.notes || "No notes available", // Add visit notes
                 obs: obs,
                 orders: [
                   ...visit?.visit?.encounters.map((encounter) => {
