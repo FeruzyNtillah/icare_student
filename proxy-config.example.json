@@ -1,0 +1,7 @@
+{
+    "/": {
+      "target":"https://icare.dhis2.udsm.ac.tz",
+      "secure": "false",
+      "changeOrigin": "true"
+    }
+  }
