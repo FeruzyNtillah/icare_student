@@ -706,8 +706,9 @@ frameDoc.document.write(`</tbody></table>`);
     //   }
     // });
 
-    frameDoc.document.write(`</tbody></table>`);
-    if (this.visitHistory?.diagnoses?.PROVISIONAL?.length) {
+    //......Checking both provisional & confirmed are rendered.............
+
+    if (Array.isArray(this.visitHistory?.diagnoses?.PROVISIONAL) && this.visitHistory?.diagnoses?.PROVISIONAL.length) {
       frameDoc.document.write(`<div>
     <h4>Provisional Diagnoses</h4>
     `);
@@ -728,19 +729,19 @@ frameDoc.document.write(`</tbody></table>`);
       });
     }
 
-    frameDoc.document.write(`
-          <div class="footer">
-            <div class="userDetails">
-              <p class="name">Printed By: ${
-                this.currentUser?.person?.display
-              }</p>
-              <p class="signature">Signature : ..............................</p>
-            </div>
+// ......End of Rendering.............
 
-            <div class=""printDate>
-              <p>Printed on: ${formatDateToString(new Date())}</p>
-            </div>
-          </div>
+    frameDoc.document.write(`
+    <div class="footer">
+  <div class="userDetails">
+    <p class="name">Printed By: ${this.currentUser?.person?.display || 'Unknown User'}</p>
+    <p class="signature">Signature : ..............................</p>
+  </div>
+
+  <div class="printDate">
+    <p>Printed on: ${formatDateToString(new Date()) || 'N/A'}</p>
+  </div>
+</div>
         </div>
       </body>
     </html>`);
