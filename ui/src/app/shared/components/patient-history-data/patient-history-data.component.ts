@@ -46,7 +46,7 @@ export class PatientHistoryDataComponent implements OnInit {
     );
 
     // Handle observations linked to form
-    this.forms?.map((form) => {
+    this.forms?.map((form: any) => {
       let observations = [];
       observationsWithForm?.map((observation) => {
         if (observation?.encounter?.form?.uuid === form?.uuid) {
@@ -67,7 +67,7 @@ export class PatientHistoryDataComponent implements OnInit {
             {
               form: form?.name,
               obs: observationsObject[key]?.reduce(
-                (obs, ob) => ({
+                (obs: any, ob: any) => ({
                   ...obs,
                   [`${ob?.concept?.uuid}`]:
                     `${ob?.concept?.uuid}` in obs
@@ -114,9 +114,9 @@ export class PatientHistoryDataComponent implements OnInit {
     });
 
     // // Handle observations not linked to form
-    this.forms?.map((form) => {
+    this.forms?.map((form: any) => {
       let observations = [];
-      form?.formFields?.forEach((field) => {
+      form?.formFields?.forEach((field: any) => {
         if (field?.formFields?.length) {
           field?.formFields?.forEach((formField) => {
             observationsWithoutForm?.forEach((obs) => {
@@ -126,7 +126,7 @@ export class PatientHistoryDataComponent implements OnInit {
             });
           });
         } else {
-          observationsWithoutForm?.forEach((obs) => {
+          observationsWithoutForm?.forEach((obs: any) => {
             if (obs?.concept?.uuid === field?.formField?.key) {
               observations = [...observations, obs];
             }
@@ -188,7 +188,7 @@ export class PatientHistoryDataComponent implements OnInit {
       return {
         ...order,
         results: this.visit?.obs
-          ?.filter((ob) => {
+          ?.filter((ob: any) => {
             if (order?.uuid == ob?.order?.uuid) {
               return ob;
             }
@@ -262,7 +262,7 @@ export class PatientHistoryDataComponent implements OnInit {
       ? frame1.contentDocument.document
       : frame1.contentDocument;
 
-    frameDoc.document.open();
+    //frameDoc.document.open();
 
     frameDoc.document.write(`
       <html>
@@ -461,15 +461,15 @@ ${this.visitHistory?.visitStopDateTime?.date} at ${this.visitHistory?.visitStopD
       if (visitData?.category === "DRUG_ORDER") {
         frameDoc.document.write(`
 <tr><td>
-      ${visitData?.name}
+      ${visitData?.name || "no name"}
       </td>
-      <td>      ${visitData?.description}
+      <td>      ${visitData?.description || "no description"}
 
       </td>
       <td>  
-      ${visitData?.date} ${visitData?.time}
+      ${visitData?.date || "no date"} ${visitData?.time || ""}
       </td>
-      <td>       ${visitData?.provider}
+      <td>       ${visitData?.provider || "no provider"}
 
       </td>
 </tr>`);
