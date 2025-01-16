@@ -717,7 +717,7 @@ ${this.visitHistory?.visitStopDateTime?.date} at ${this.visitHistory?.visitStopD
     // });
 
     frameDoc.document.write(`</tbody></table>`);
-    if (this.visitHistory?.diagnoses?.PROVISIONAL?.length) {
+    if (Array.isArray(this.visitHistory?.diagnoses?.PROVISIONAL) && this.visitHistory?.diagnoses?.PROVISIONAL.length) {
       frameDoc.document.write(`<div>
     <h4>Provisional Diagnoses</h4>
     `);
