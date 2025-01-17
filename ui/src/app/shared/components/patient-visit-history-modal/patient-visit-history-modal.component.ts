@@ -35,14 +35,23 @@ export class PatientVisitHistoryModalComponent implements OnInit {
     );
   }
   
-
+//.............Handle Null or Undefined patientUuid.............
   ngOnInit(): void {
     this.forms$ = this.store.select(getOpenMRSForms);
-    this.patientVisits$ = this.visitService.getAllPatientVisits(
-      this.patientUuid,
-      true,
-      this.omitCurrent
-    );
+  
+    if (this.patientUuid) {
+      this.patientVisits$ = this.visitService.getAllPatientVisits(
+        this.patientUuid,
+        true,
+        this.omitCurrent
+      );
+    } else {
+      console.warn('No patient UUID provided.');
+      this.patientVisits$ = new Observable((subscriber) => {
+        subscriber.next([]);
+        subscriber.complete();
+      });
+    }
   }
-}
+}  
 
