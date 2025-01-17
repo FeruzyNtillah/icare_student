@@ -14,19 +14,19 @@
   } as params"
 >
   <!-- Loading Indicator -->
-  <div *ngIf="!params?.visits?.length && loadingData || !params?.provider">
+  <div *ngIf="(!params?.visits?.length && loadingData ) || !params?.provider">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 
   <!-- Visits Display -->
   <div *ngIf="params?.visits?.length && !loadingData && params?.provider">
     <mat-vertical-stepper [linear]="false" #stepper>
-      <mat-step *ngFor="let visit of params?.visits">
+      <mat-step *ngFor="let visit of params?.visits || []">
         <ng-template matStepLabel>
           <strong> {{ visit?.visit?.visitType?.display }} : </strong>
-          {{ visit?.visit?.startDatetime | date: "dd-MM-yyyy HH:mm:ss" }}
+          {{ visit?.visit?.startDatetime | date: "dd-MM-yyyy HH:mm:ss" || "N/A" }}
           <span *ngIf="visit?.visit?.stopDatetime">
-            to {{ visit?.visit?.stopDatetime | date: "dd-MM-yyyy HH:mm:ss" }}
+            to {{ visit?.visit?.stopDatetime | date: "dd-MM-yyyy HH:mm:ss" || "N/A" }}
           </span>
           <span *ngIf="!visit?.visit?.stopDatetime">
             <i>(On-going visit)</i>
