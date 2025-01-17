@@ -1,13 +1,24 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { AppState } from "src/app/store/reducers";
 import {
   getAllForms,
   getOpenMRSForms,
 } from "src/app/store/selectors/form.selectors";
 import { VisitsService } from "../../resources/visits/services";
+import { catchError } from "rxjs/operators";
+
+//..........Type Safety for data...........
+interface PatientVisitHistoryData {
+  patientUuid?: string;
+  shouldShowVitalsOnly?: boolean;
+  location?: {
+    tags?: { name: string }[];
+  };
+}
+
 
 @Component({
   selector: "app-patient-visit-history-modal",
@@ -21,6 +32,7 @@ export class PatientVisitHistoryModalComponent implements OnInit {
   shouldShowVitalsOnly: Boolean;
   omitCurrent: boolean = true;
   forms$: Observable<any[]>;
+
   //.........Initialization of data in Constructor..............
   constructor(
     private visitService: VisitsService,
@@ -36,9 +48,15 @@ export class PatientVisitHistoryModalComponent implements OnInit {
   }
   
 //.............Handle Null or Undefined patientUuid.............
-  ngOnInit(): void {
-    this.forms$ = this.store.select(getOpenMRSForms);
-  
+ngOnInit(): void {
+  console.log("Injected Data:", this.data);
+
+  this.forms$ = this.store.select(getOpenMRSForms).pipe(
+    catchError((error) => {
+      console.error("Error fetching forms:", error);
+      return of([]);
+    })
+  );
     if (this.patientUuid) {
       this.patientVisits$ = this.visitService.getAllPatientVisits(
         this.patientUuid,
