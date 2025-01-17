@@ -32,6 +32,8 @@ export class PatientVisitHistoryModalComponent implements OnInit {
   shouldShowVitalsOnly: Boolean;
   omitCurrent: boolean = true;
   forms$: Observable<any[]>;
+  formsSubscription: any;
+  visitsSubscription: any;
 
   //.........Initialization of data in Constructor..............
   constructor(
@@ -57,19 +59,25 @@ ngOnInit(): void {
       return of([]);
     })
   );
-    if (this.patientUuid) {
-      this.patientVisits$ = this.visitService.getAllPatientVisits(
-        this.patientUuid,
-        true,
-        this.omitCurrent
+
+  if (this.patientUuid) {
+    this.patientVisits$ = this.visitService
+      .getAllPatientVisits(this.patientUuid, true, this.omitCurrent)
+      .pipe(
+        catchError((error) => {
+          console.error("Error fetching patient visits:", error);
+          return of([]);
+        })
       );
-    } else {
-      console.warn('No patient UUID provided.');
-      this.patientVisits$ = new Observable((subscriber) => {
-        subscriber.next([]);
-        subscriber.complete();
-      });
-    }
+  } else {
+    console.warn("No patient UUID provided.");
+    this.patientVisits$ = of([]);
   }
-}  
+}
+
+ngOnDestroy(): void {
+  this.formsSubscription?.unsubscribe();
+  this.visitsSubscription?.unsubscribe();
+}
+}
 
